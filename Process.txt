@@ -1,0 +1,44 @@
+--> Create two folder Backend and Frontend
+
+
+############# Installation Process #############
+
+--> Working in backend and installation of required pakages
+--> npm init
+--> npm i express nodemon mongoose dotenv bcryptjs jsonwebtoken cookie-parser 
+
+
+--> After instalation create index.js file 
+--> packeg.json file in place of text script use the dev and write nodemon index.jso
+
+--> now create the different folders and a .evn file for the different purpos
+ * Controllers
+ * Routes
+ * Middleware
+ * Models
+
+
+-> in .env file write the sensitive things like portnumber and database 
+
+--> now its time to work on the index.js file
+ > import express
+ > import dotenv 
+
+--> using the mongodb atlas bring the link and create the schema for the user details
+ > in mongodb cluster or mongodb compass use can use any of them now 
+ >here u have to do some imp steps like copy the password and choose for vscode and u will get a string copy that string and paste it into the dotenv file
+
+
+--> know after pesting the string link in the .env we create 
+ > folder called config. and create a file inside the folder named db.js
+
+ > and anything want to use fromt the env file we use   > process.env.variable_Name
+  >{imp thing that in mydatabase name the (.) will not be used as the name}
+
+
+--> now its time to create the authentication part in the models folder 
+ > create a file called user.model.js (here we will make a schema of the user)
+ > After making the schema we move to the next part for authentication
+--> move to the controller folders
+ > create a new file called auth.controller.js
+ 

@@ -1,3 +1,7 @@
+import user from "../models/user.model.js"
+import bcrypt from "bcryptjs"
+import genToken from "../utils/token"
+
 const signUp = async (req,res) =>{
     try{
 
@@ -19,8 +23,11 @@ const signUp = async (req,res) =>{
             email,
             role,
             mobile,
-            hashedPassword
+            password:hashedPassword
         })
+
+        const token = await genToken(user.id)
+        res.cookie("token")
 
         
     }
