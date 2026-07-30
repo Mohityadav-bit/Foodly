@@ -1,8 +1,53 @@
-import React from 'react'
-import { ArrowRight, CheckCircle2, Lock, Mail, Phone, Sparkles, UserRound, Eye, EyeOff } from 'lucide-react'
+import React, { useState } from 'react'
+import { Link } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { serverUrl } from "../App";
+import axios from 'axios';
+import { burger,logo } from '../assets/assets';
 
+import {
+  ArrowRight,
+  CheckCircle2,
+  Lock,
+  Mail,
+  Phone,
+  Sparkles,
+  UserRound,
+  Eye,
+  EyeOff,
+} from 'lucide-react'
 
 const Signup = () => {
+  const [showPassword, setShowPassword] = useState(false)
+
+  const [role, setRole] = useState("")
+
+
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    mobile: '',
+    password: '',
+  })
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value })
+  }
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { fullName, email, mobile, password } = formData;
+      const result = await axios.post(`${serverUrl}/api/auth/signup`, { fullName, email, mobile, role, password }, { withCredentials: true })
+      console.log(result)
+    } catch (error) {
+      console.log(error.message)
+
+    }
+  }
+
+
   const colors = {
     primary: '#FF6B35',
     primaryHover: '#F05A28',
@@ -17,143 +62,204 @@ const Signup = () => {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center px-4 py-5"
+      className="h-screen w-full flex items-center justify-center px-4"
       style={{ backgroundColor: colors.background }}
     >
+      <div className="w-full max-w-5xl h-[90vh] rounded-[28px] border bg-white shadow-xl flex overflow-hidden">
 
-      {/* Right Part */}
-      <div className="w-full max-w-5xl overflow-hidden rounded-[32px] border border-[#E5E7EB] bg-white shadow-[0_25px_80px_rgba(17,24,39,0.08)]">
-        <div className="flex flex-col lg:flex-row">
-          <div className="w-full lg:w-[45%] p-8 lg:p-10" style={{ backgroundColor: colors.primaryLight }}>
-            <div className="flex items-center gap-2 text-[20px] font-semibold" style={{ color: colors.primary }}>
-              <Sparkles size={20} />
-              <span>Foodly</span>
+        {/* LEFT INFO PANEL */}
+        <div
+          className="hidden lg:flex lg:w-[45%] flex-col justify-between p-8"
+          style={{ backgroundColor: colors.primaryLight }}
+        >
+          <div>
+            <div
+              className="h-10 w-30 object-contain cursor-pointer">
+              <img src={logo} alt="logo" />
             </div>
 
-            <h1 className="mt-6 text-3xl font-bold leading-tight" style={{ color: colors.heading }}>
+            <h1
+              className="mt-2 text-3xl font-bold leading-tight"
+              style={{ color: colors.heading }}
+            >
               Join thousands of food lovers
             </h1>
-            <p className="mt-3 text-base leading-7" style={{ color: colors.body }}>
-              Create your account to order your favourite meals, save your addresses, and enjoy exclusive deals.
+
+            <p className="mt-3 text-sm" style={{ color: colors.body }}>
+              Order faster, save addresses, and get exclusive offers.
+            </p>
+          </div>
+          <div className="flex items-center justify-center py-2  lg:w-[400px]">
+            <img
+              src={burger}
+              alt="Burger illustration"
+              className="w-[360px] sm:w-[200px] lg:w-[300px] object-contain rounded-3xl shadow-lg hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+
+
+          <div className="space-y-2">
+            {[
+              'Fast checkout & saved addresses',
+              'Exclusive offers & rewards',
+              'Secure payments',
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <CheckCircle2 size={18} style={{ color: colors.primary }} />
+                <span className="text-sm font-medium">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT FORM PANEL */}
+        <div className="w-full lg:w-[55%] flex items-center justify-center px-6">
+          <div className="w-full max-w-md">
+            <h2 className="text-2xl font-semibold" style={{ color: colors.heading }}>
+              Create Account
+            </h2>
+            <p className="mt-1 text-sm" style={{ color: colors.muted }}>
+              Sign up to get started
             </p>
 
-            <div className="mt-8 rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
-              <div className="flex items-center gap-3">
-                <CheckCircle2 size={18} style={{ color: colors.primary }} />
-                <p className="text-sm font-medium" style={{ color: colors.heading }}>
-                  Fast checkout and saved addresses
-                </p>
-              </div>
-              <div className="mt-3 flex items-center gap-3">
-                <CheckCircle2 size={18} style={{ color: colors.primary }} />
-                <p className="text-sm font-medium" style={{ color: colors.heading }}>
-                  Fresh offers and loyalty rewards
-                </p>
-              </div>
-              <div className="mt-3 flex items-center gap-3">
-                <CheckCircle2 size={18} style={{ color: colors.primary }} />
-                <p className="text-sm font-medium" style={{ color: colors.heading }}>
-                  Secure payments and quick support
-                </p>
-              </div>
-            </div>
-          </div>
-          {/* Left part */}
-          <div className="w-full lg:w-[55%] p-8 lg:p-10">
-            <div className="mb-6">
-              <h2 className="text-2xl font-semibold" style={{ color: colors.heading }}>
-                Create Account
-              </h2>
-              <p className="mt-2 text-sm" style={{ color: colors.muted }}>
-                Sign up to get started with delicious deliveries.
-              </p>
-            </div>
+            <form onSubmit={handleSubmit} className="mt-4 space-y-4">
 
-            <form className="space-y-4">
-
-              {/* fullName */}
-              <div>
-                <label htmlFor="fullName" className="mb-2 block text-sm font-medium" style={{ color: colors.heading }}>
-                  Full Name
-                </label>
-                <div className="flex items-center gap-3 rounded-xl border px-4 py-3 transition focus-within:border-[#FF6B35] focus-within:ring-2 focus-within:ring-[#FFF2EB]" style={{ borderColor: colors.border }}>
-                  <UserRound size={18} style={{ color: colors.muted }} />
-                  <input
-                    id="fullName"
-                    type="text"
-                    className="w-full border-none bg-transparent outline-none placeholder:text-[#9CA3AF]"
-                    placeholder="Enter your full name"
-                   />
-                </div>
-              </div>
+              {/* Full Name */}
+              <InputField
+                icon={<UserRound size={18} />}
+                id="fullName"
+                placeholder="Full name"
+                value={formData.fullName}
+                onChange={handleChange}
+              />
 
               {/* Email */}
-              <div>
-                <label htmlFor="email" className="mb-2 block text-sm font-medium" style={{ color: colors.heading }}>
-                  Email
-                </label>
-                <div className="flex items-center gap-3 rounded-xl border px-4 py-3 transition focus-within:border-[#FF6B35] focus-within:ring-2 focus-within:ring-[#FFF2EB]" style={{ borderColor: colors.border }}>
-                  <Mail size={18} style={{ color: colors.muted }} />
-                  <input
-                    id="email"
-                    type="email"
-                    className="w-full border-none bg-transparent outline-none placeholder:text-[#9CA3AF]"
-                    placeholder="Enter your email"
-                  />
-                </div>
-              </div>
+              <InputField
+                icon={<Mail size={18} />}
+                id="email"
+                type="email"
+                placeholder="Email address"
+                value={formData.email}
+                onChange={handleChange}
+              />
 
-              {/* mobile */}
-              <div>
-                <label htmlFor="mobile" className="mb-2 block text-sm font-medium" style={{ color: colors.heading }}>
-                  Mobile
-                </label>
-                <div className="flex items-center gap-3 rounded-xl border px-4 py-3 transition focus-within:border-[#FF6B35] focus-within:ring-2 focus-within:ring-[#FFF2EB]" style={{ borderColor: colors.border }}>
-                  <Phone size={18} style={{ color: colors.muted }} />
-                  <input
-                    id="mobile"
-                    type="tel"
-                    className="w-full border-none bg-transparent outline-none placeholder:text-[#9CA3AF]"
-                    placeholder="Enter your mobile no."
-                  />
-                </div>
-              </div>
+              {/* Mobile */}
+              <InputField
+                icon={<Phone size={18} />}
+                id="mobile"
+                type="tel"
+                placeholder="Mobile number"
+                value={formData.mobile}
+                onChange={handleChange}
+              />
 
               {/* Password */}
-              <div>
-                <label htmlFor="password" className="mb-2 block text-sm font-medium" style={{ color: colors.heading }}>
-                  Password
+              <div className="relative">
+                <InputField
+                  icon={<Lock size={18} />}
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-2 text-gray-500 cursor-pointer"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+
+              {/* Role */}
+              <div className="relative">
+                <label htmlFor="role" className="block text-gray-700 font-medium mb-1">
+                  Select Role
                 </label>
-                <div className="flex items-center gap-3 rounded-xl border px-4 py-3 transition focus-within:border-[#FF6B35] focus-within:ring-2 focus-within:ring-[#FFF2EB]" style={{ borderColor: colors.border }}>
-                  <Lock size={18} style={{ color: colors.muted }} />
-                  <input
-                    id="password"
-                    type="password"
-                    className="w-full border-none bg-transparent outline-none placeholder:text-[#9CA3AF]"
-                    placeholder="Enter your password"
-                  />
+
+                <div className="flex gap-2">
+                  {["user", "owner", "deliveryBoy"].map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() =>
+                        setRole(r)
+
+                      }
+                      className={`flex-1 px-2 py-1 rounded-md border font-medium 
+transition-all duration-200 cursor-pointer
+        ${role === r
+                          ? "bg-[#FF6B35] text-white border-[#FF6B35]"
+                          : "border-gray-300 text-gray-600 hover:border-[#FF6B35] hover:text-[#FF6B35] hover:bg-[#FFF2EB]"
+                        }`}
+                    >
+                      {r}
+                    </button>
+                  ))}
                 </div>
               </div>
 
+              {/* Submit */}
               <button
-                type="button"
-                className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-semibold text-white transition hover:opacity-95"
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 rounded-md py-1 text-white font-semibold transition hover:shadow-md hover:bg-gray-50 
+active:scale-95 transition-all duration-200 ease-in-out  cursor-pointer"
                 style={{ backgroundColor: colors.primary }}
+
               >
                 Create Account
                 <ArrowRight size={18} />
               </button>
             </form>
 
-            <p className="mt-5 text-center text-sm" style={{ color: colors.muted }}>
+            {/* Signup with google */}
+            <button className="w-full mt-4 flex items-center justify-center gap-3 
+bg-white border border-gray-300 rounded-lg px-2 py-1 
+shadow-sm hover:shadow-md hover:bg-gray-50 
+active:scale-95 transition-all duration-200 ease-in-out cursor-pointer">
+
+              <FcGoogle size={22} />
+
+              <span className="text-sm font-medium text-gray-700">
+                Continue with Google
+              </span>
+            </button>
+
+            {/* Already have an account */}
+            <p className="mt-2 text-sm text-center" style={{ color: colors.muted }}>
               Already have an account?{' '}
-              <a href="/signin" className="font-semibold" style={{ color: colors.primary }}>
+              <Link
+                to="/signin"
+                style={{ color: colors.primary }}
+                className="font-semibold"
+              >
                 Sign in
-              </a>
+              </Link>
             </p>
+
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+/* Reusable Input Component */
+const InputField = ({ icon, id, type = 'text', placeholder, value, onChange }) => {
+  return (
+    <div className="flex items-center gap-3 border rounded-md px-3 py-1 focus-within:ring-2 focus-within:ring-orange-200">
+      <span className="text-gray-400">{icon}</span>
+      <input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className="w-full outline-none bg-transparent text-sm"
+        required
+      />
     </div>
   )
 }
