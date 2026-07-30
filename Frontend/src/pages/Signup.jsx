@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { serverUrl } from "../App";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { burger,logo } from '../assets/assets';
+import toast from 'react-hot-toast';
+import { burger, logo } from '../assets/assets';
 
 import {
   ArrowRight,
@@ -21,7 +23,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false)
 
   const [role, setRole] = useState("")
-
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -37,11 +39,20 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const loading = toast.loading("Signing in...");
     try {
       const { fullName, email, mobile, password } = formData;
       const result = await axios.post(`${serverUrl}/api/auth/signup`, { fullName, email, mobile, role, password }, { withCredentials: true })
+      toast.dismiss(loading);
+      toast.success("Account created successfully");
       console.log(result)
+      navigate("/");
     } catch (error) {
+      // toast.dismiss(loading); // ❗ always dismiss
+
+      toast.error(
+        error?.response?.data?.message
+      );
       console.log(error.message)
 
     }
@@ -85,20 +96,18 @@ const Signup = () => {
               Join thousands of food lovers
             </h1>
 
-            <p className="mt-3 text-sm" style={{ color: colors.body }}>
+            <p className="mt-3 text-sm mb-2" style={{ color: colors.body }}>
               Order faster, save addresses, and get exclusive offers.
             </p>
           </div>
-          <div className="flex items-center justify-center py-2  lg:w-[400px]">
-            <img
-              src={burger}
-              alt="Burger illustration"
-              className="w-[360px] sm:w-[200px] lg:w-[300px] object-contain rounded-3xl shadow-lg hover:scale-105 transition-transform duration-300"
-            />
-          </div>
+          <img
+            src={burger}
+            alt="Burger illustration"
+            className="w-[360px] sm:w-[200px] lg:w-[300px] object-contain rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300 border-black-200"
+          />
 
 
-          <div className="space-y-2">
+          <div className="space-y-2 mt-3">
             {[
               'Fast checkout & saved addresses',
               'Exclusive offers & rewards',
@@ -207,6 +216,8 @@ transition-all duration-200 cursor-pointer
                 className="w-full flex items-center justify-center gap-2 rounded-md py-1 text-white font-semibold transition hover:shadow-md hover:bg-gray-50 
 active:scale-95 transition-all duration-200 ease-in-out  cursor-pointer"
                 style={{ backgroundColor: colors.primary }}
+                onClick={handleSubmit}
+
 
               >
                 Create Account

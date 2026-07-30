@@ -13,6 +13,8 @@ const assets = Object.fromEntries(
 export const burger = assets.burger;
 export const restaurent = assets.restaurant;
 export const logo = assets.logo;
+export const img1 = assets.img1;
+
 
 export default assets;
 

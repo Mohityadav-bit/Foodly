@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { restaurent, logo } from '../assets/assets'
-import axios from 'axios'
 import { serverUrl } from '../App'
+import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 import {
   ArrowRight,
   Lock,
@@ -18,19 +20,29 @@ const Signin = () => {
     email: '',
     password: '',
   })
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value })
   }
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const loading = toast.loading("Signing in...");
     try {
-      const {email,password } = formData;
-      const result = await axios.post(`${serverUrl}/api/auth/signin`, {email, password }, { withCredentials: true })
-      console.log(result)
+      const { email, password } = formData;
+      const result = await axios.post(`${serverUrl}/api/auth/signin`, { email, password }, { withCredentials: true })
+      toast.dismiss(loading);
+      toast.success("Login successful");
+      // console.log(result)
+      navigate('/')
     } catch (error) {
-      console.log(error.message)
+      toast.dismiss(loading); // ❗ always dismiss
+
+      toast.error(
+        error?.response?.data?.message || "Invalid email or password ❌"
+      );
+      // console.log(error.message)
 
     }
   }
@@ -72,20 +84,20 @@ const Signin = () => {
               Welcome back!
             </h1>
 
-            <p className="mt-3 text-sm" style={{ color: colors.body }}>
+            <p className="mt-3 text-sm mb-2" style={{ color: colors.body }}>
               Sign in to continue ordering your favorite meals.
             </p>
           </div>
 
-          <div className="flex items-center justify-center py-2">
-            <img
-              src={restaurent}
-              alt="restaurent illustration"
-              className="w-[260px] sm:w-[300px] lg:w-[280px] object-contain rounded-3xl shadow-lg hover:scale-105 transition-transform duration-300"
-            />
-          </div>
 
-          <div className="space-y-3 text-sm">
+          <img
+            src={restaurent}
+            alt="restaurent illustration"
+            className="w-[260px] sm:w-[300px] lg:w-[300px] object-contain rounded-3xl shadow-lg hover:scale-105 transition-transform duration-300 border-28px"
+          />
+
+
+          <div className="space-y-3 text-sm mt-3">
             <p>🍔 Fast food delivery</p>
             <p>⚡ Quick checkout</p>
             <p>🎁 Exclusive offers</p>
@@ -146,6 +158,7 @@ const Signin = () => {
                 type="submit"
                 className="w-full flex items-center justify-center gap-2 rounded-xl py-3 text-white font-semibold transition"
                 style={{ backgroundColor: colors.primary }}
+                onClick={handleSubmit}
               >
                 Sign In
                 <ArrowRight size={18} />
