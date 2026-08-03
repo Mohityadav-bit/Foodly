@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { serverUrl } from "../App";
@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { burger, logo } from '../assets/assets';
-
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from "../firebase.js";
 import {
   ArrowRight,
   CheckCircle2,
@@ -39,11 +40,11 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const loading = toast.loading("Signing in...");
+    // const loading = toast.loading("Signing in...");
     try {
       const { fullName, email, mobile, password } = formData;
       const result = await axios.post(`${serverUrl}/api/auth/signup`, { fullName, email, mobile, role, password }, { withCredentials: true })
-      toast.dismiss(loading);
+      // toast.dismiss(loading);
       toast.success("Account created successfully");
       console.log(result)
       navigate("/");
@@ -57,6 +58,52 @@ const Signup = () => {
 
     }
   }
+
+  // Handle Google Auth
+  const handleGoogleAuth = async () => {
+    const loading = toast.loading("Signing in with Google...");
+
+    try {
+      if (!formData.mobile) {
+        toast.dismiss(loading);
+        return toast.error("Mobile number is required");
+      }
+
+      if (!role) {
+        toast.dismiss(loading);
+        return toast.error("Please select a role");
+      }
+
+      const provider = new GoogleAuthProvider();
+
+      const result = await signInWithPopup(auth, provider);
+
+      const { data } = await axios.post(
+        `${serverUrl}/api/auth/google-auth`,
+        {
+          fullName: result.user.displayName,
+          email: result.user.email,
+          mobile: formData.mobile,
+          role,
+        },
+        { withCredentials: true }
+      );
+
+      toast.dismiss(loading);
+      toast.success("Account created successfully!");
+
+      navigate("/");
+    } catch (error) {
+      toast.dismiss(loading);
+
+      toast.error(
+        error.response?.data?.message || "Google Sign-In failed"
+      );
+
+      console.log(error);
+    }
+  };
+
 
 
   const colors = {
@@ -215,11 +262,7 @@ transition-all duration-200 cursor-pointer
                 type="submit"
                 className="w-full flex items-center justify-center gap-2 rounded-md py-1 text-white font-semibold transition hover:shadow-md hover:bg-gray-50 
 active:scale-95 transition-all duration-200 ease-in-out  cursor-pointer"
-                style={{ backgroundColor: colors.primary }}
-                onClick={handleSubmit}
-
-
-              >
+                style={{ backgroundColor: colors.primary }}>
                 Create Account
                 <ArrowRight size={18} />
               </button>
@@ -229,7 +272,8 @@ active:scale-95 transition-all duration-200 ease-in-out  cursor-pointer"
             <button className="w-full mt-4 flex items-center justify-center gap-3 
 bg-white border border-gray-300 rounded-lg px-2 py-1 
 shadow-sm hover:shadow-md hover:bg-gray-50 
-active:scale-95 transition-all duration-200 ease-in-out cursor-pointer">
+active:scale-95 transition-all duration-200 ease-in-out cursor-pointer"
+              onClick={handleGoogleAuth}>
 
               <FcGoogle size={22} />
 

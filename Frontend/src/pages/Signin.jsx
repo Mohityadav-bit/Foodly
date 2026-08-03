@@ -3,7 +3,10 @@ import { restaurent, logo } from '../assets/assets'
 import { serverUrl } from '../App'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { FcGoogle } from "react-icons/fc";
 import axios from 'axios'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from "../firebase.js";
 import {
   ArrowRight,
   Lock,
@@ -31,21 +34,54 @@ const Signin = () => {
     const loading = toast.loading("Signing in...");
     try {
       const { email, password } = formData;
-      const result = await axios.post(`${serverUrl}/api/auth/signin`, { email, password }, { withCredentials: true })
+      const {data} = await axios.post(`${serverUrl}/api/auth/signin`, { email, password }, { withCredentials: true })
       toast.dismiss(loading);
-      toast.success("Login successful");
+      toast.success(`Welcome back, ${data.fullName || result.user.displayName}!`);
       // console.log(result)
       navigate('/')
     } catch (error) {
       toast.dismiss(loading); // ❗ always dismiss
 
       toast.error(
-        error?.response?.data?.message || "Invalid email or password ❌"
-      );
+        error?.response?.data?.message);
       // console.log(error.message)
 
     }
   }
+
+  // Google Authentication 
+  const handleGoogleAuth = async () => {
+    const loading = toast.loading("Signing in with Google...");
+
+    try {
+      const provider = new GoogleAuthProvider();
+
+      const result = await signInWithPopup(auth, provider);
+
+      const { data } = await axios.post(
+        `${serverUrl}/api/auth/google-auth`,
+        {
+          fullName: result.user.displayName,
+          email: result.user.email,
+        },
+        { withCredentials: true }
+      );
+
+      toast.dismiss(loading);
+      toast.success(`Welcome back, ${data.fullName || result.user.displayName}!`);
+
+      navigate("/");
+    } catch (error) {
+      toast.dismiss(loading);
+
+      toast.error(
+        error.response?.data?.message ||
+        "Unable to sign in with Google. Please try again."
+      );
+
+      console.error(error);
+    }
+  };
 
   const colors = {
     primary: '#FF6B35',
@@ -157,13 +193,25 @@ const Signin = () => {
               <button
                 type="submit"
                 className="w-full flex items-center justify-center gap-2 rounded-xl py-3 text-white font-semibold transition"
-                style={{ backgroundColor: colors.primary }}
-                onClick={handleSubmit}
-              >
+                style={{ backgroundColor: colors.primary }}>
                 Sign In
                 <ArrowRight size={18} />
               </button>
             </form>
+
+            {/* Signup with google */}
+            <button className="w-full mt-4 flex items-center justify-center gap-3 
+            bg-white border border-gray-300 rounded-lg px-2 py-1 
+            shadow-sm hover:shadow-md hover:bg-gray-50 
+            active:scale-95 transition-all duration-200 ease-in-out cursor-pointer"
+              onClick={handleGoogleAuth}>
+
+              <FcGoogle size={22} />
+
+              <span className="text-sm font-medium text-gray-700">
+                Continue with Google
+              </span>
+            </button>
 
             <p className="mt-4 text-sm text-center" style={{ color: colors.muted }}>
               Don’t have an account?{' '}
