@@ -1,89 +1,168 @@
-# 🚀 Phase 1: Backend Setup & Authentication Guide
+# 🍔 Foodly
 
-This README documents the complete setup process for creating a Node.js backend with Express.js, MongoDB, and JWT Authentication.
+Foodly is a modern Full Stack Food Ordering Web Application built using the MERN Stack. It provides secure user authentication, Google Sign-In, password recovery, and a responsive user interface for an enhanced food ordering experience.
+
+> 🚧 This project is currently under active development.
 
 ---
 
-# 📌 Project Structure
+## 📸 Preview
 
-Create the main project folder and inside it create two folders:
+<!-- Add screenshots here -->
 
-```text
-Project/
+<p align="center">
+  <img src="Zomato2.0/Frontend/src/assets/all_imgs/logo.png" width="800" alt="Foodly Home">
+</p>
+
+---
+
+# ✨ Features
+
+### Authentication
+
+- User Registration
+- User Login
+- Secure Password Hashing using bcrypt
+- JWT Authentication
+- Forgot Password
+- Password Reset via Email
+- Google Authentication (Firebase)
+- Secure Authentication Cookies
+- Logout
+
+### Security
+
+- JWT Authentication
+- Password Encryption
+- Protected Routes
+- Environment Variables
+- Secure Token Generation
+
+### User Experience
+
+- Responsive UI
+- Loading Indicators
+- Animated Logo
+- Clean Authentication Flow
+- Error Handling
+- Toast Notifications
+
+---
+
+# 🚀 Tech Stack
+
+## Frontend
+
+- React.js
+- Vite
+- React Router
+- Firebase Authentication
+- Axios
+- CSS
+
+## Backend
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- bcrypt
+- Nodemailer
+
+---
+
+# 📁 Project Structure
+
+```
+Foodly
 │
-├── Backend/
-└── Frontend/
+├── Backend
+│   ├── config
+│   │   └── db.js
+│   │
+│   ├── controllers
+│   │   └── auth.controller.js
+│   │
+│   ├── middleware
+│   │
+│   ├── models
+│   │   └── user.model.js
+│   │
+│   ├── routes
+│   │   └── auth.routes.js
+│   │
+│   ├── utils
+│   │   ├── mail.js
+│   │   └── token.js
+│   │
+│   ├── index.js
+│   ├── package.json
+│   └── package-lock.json
+│
+├── Frontend
+│   ├── public
+│   ├── src
+│   │
+│   ├── assets
+│   │
+│   ├── components
+│   │   ├── FoodlyLogoAnimated.jsx
+│   │   └── Loader.jsx
+│   │
+│   ├── pages
+│   │   ├── Signup.jsx
+│   │   ├── Signin.jsx
+│   │   ├── ForgotPassword.jsx
+│   │   └── HomePage.jsx
+│   │
+│   ├── firebase.js
+│   ├── App.jsx
+│   └── index.css
+│
+├── .gitignore
+└── README.md
 ```
 
-The backend will contain the server-side code, while the frontend will contain the client-side application.
+---
+
+# ⚙️ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/Foodly.git
+
+cd Foodly
+```
 
 ---
 
-# 📦 Step 1: Initialize the Backend
-
-Navigate to the Backend folder.
+## Backend Setup
 
 ```bash
 cd Backend
+
+npm install
 ```
 
-Initialize the Node.js project.
+Create a `.env` file
 
-```bash
-npm init -y
+```env
+PORT=5000
+
+MONGODB_URI=your_mongodb_connection
+
+JWT_SECRET=your_secret
+
+EMAIL=your_email
+
+EMAIL_PASSWORD=your_email_password
+
+CLIENT_URL=http://localhost:5173
 ```
 
-This command creates a `package.json` file that stores all project information and dependencies.
-
----
-
-# 📦 Step 2: Install Required Packages
-
-Install the required dependencies.
-
-```bash
-npm install express mongoose dotenv bcryptjs jsonwebtoken cookie-parser
-```
-
-Install Nodemon as a development dependency.
-
-```bash
-npm install --save-dev nodemon
-```
-
-### Packages Used
-
-| Package | Purpose |
-|----------|----------|
-| Express | Backend Framework |
-| Mongoose | MongoDB ODM |
-| dotenv | Manage Environment Variables |
-| bcryptjs | Password Hashing |
-| jsonwebtoken | JWT Authentication |
-| cookie-parser | Read Cookies |
-| Nodemon | Auto Restart Server |
-
----
-
-# ⚙️ Step 3: Configure package.json
-
-Open the `package.json` file.
-
-Replace the default script
-
-```json
-"test": "echo \"Error: no test specified\" && exit 1"
-```
-
-with
-
-```json
-"scripts": {
-    "dev": "nodemon index.js"
-}
-```
-
-Now the backend can be started using
+Run Backend
 
 ```bash
 npm run dev
@@ -91,393 +170,207 @@ npm run dev
 
 ---
 
-# 📁 Step 4: Create Project Structure
+## Frontend Setup
 
-Create the following folders inside Backend.
+```bash
+cd Frontend
 
-```text
-Backend/
-│
-├── config/
-├── controllers/
-├── middleware/
-├── models/
-├── routes/
-├── utils/
-│
-├── .env
-├── .gitignore
-├── index.js
-├── package.json
-└── package-lock.json
+npm install
 ```
 
-### Folder Purpose
-
-| Folder | Description |
-|----------|-------------|
-| config | Database configuration |
-| controllers | Business Logic |
-| middleware | Authentication Middleware |
-| models | Database Models |
-| routes | API Routes |
-| utils | Utility Functions |
-
----
-
-# 🌍 Step 5: Create Environment Variables
-
-Create a file named
-
-```
-.env
-```
-
-Store all sensitive information inside this file.
-
-Example
+Create `.env`
 
 ```env
-PORT=5000
+VITE_FIREBASE_API_KEY=
 
-MONGODB_URI=Your_MongoDB_Atlas_Connection_String
+VITE_FIREBASE_AUTH_DOMAIN=
 
-JWT_SECRET=YourSecretKey
+VITE_FIREBASE_PROJECT_ID=
+
+VITE_FIREBASE_STORAGE_BUCKET=
+
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+
+VITE_FIREBASE_APP_ID=
 ```
 
-### Why use .env?
+Run Frontend
 
-- Keeps sensitive information secure.
-- Makes changing configuration easier.
-- Prevents exposing passwords in GitHub.
-
----
-
-# 🗄️ Step 6: Setup MongoDB
-
-You can use either
-
-- MongoDB Atlas (Cloud)
-- MongoDB Compass (Local)
-
-## MongoDB Atlas Setup
-
-1. Login to MongoDB Atlas.
-2. Create a new Cluster.
-3. Create a Database User.
-4. Add your current IP Address under Network Access.
-5. Click **Connect**.
-6. Choose **Drivers**.
-7. Select **Node.js**.
-8. Copy the generated connection string.
-
-It will look similar to:
-
-```text
-mongodb+srv://<username>:<password>@cluster.mongodb.net/myDatabase
-```
-
-Replace
-
-```
-<password>
-```
-
-with your database password.
-
-Paste the final connection string inside your `.env` file.
-
-Example
-
-```env
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/myDatabase
-```
-
-> **Important:** Avoid using a dot (`.`) in the database name.
-
----
-
-# 🔌 Step 7: Configure Database Connection
-
-Create a folder named
-
-```
-config
-```
-
-Inside it create
-
-```
-db.js
-```
-
-This file is responsible for connecting your application to MongoDB.
-
-Whenever you need an environment variable, use
-
-```javascript
-process.env.VARIABLE_NAME
-```
-
-Example
-
-```javascript
-process.env.PORT
-
-process.env.MONGODB_URI
-
-process.env.JWT_SECRET
+```bash
+npm run dev
 ```
 
 ---
 
-# 🚀 Step 8: Setup Express Server
+# 🔐 Authentication Flow
 
-Create
-
-```
-index.js
-```
-
-Import the required packages.
-
-```javascript
-express
-dotenv
-```
-
-In this file you will
-
-- Initialize Express
-- Configure dotenv
-- Connect Database
-- Register Middleware
-- Register Routes
-- Start the Server
-
----
-
-# 👤 Step 9: Create User Model
-
-Navigate to
+### Email Authentication
 
 ```
-models/
+Signup
+
+↓
+
+Email Verification (Optional)
+
+↓
+
+Login
+
+↓
+
+JWT Generated
+
+↓
+
+Authenticated User
 ```
 
-Create
+### Forgot Password
 
 ```
-user.model.js
+Forgot Password
+
+↓
+
+Email Sent
+
+↓
+
+Reset Password Link
+
+↓
+
+Create New Password
 ```
 
-Inside this file create the User Schema.
-
-Example fields
-
-- Name
-- Email
-- Password
-- Profile Picture (Optional)
-- Created At
-- Updated At
-
-Finally export the model.
-
----
-
-# 🔐 Step 10: Authentication Controller
-
-Navigate to
+### Google Authentication
 
 ```
-controllers/
-```
+Google Sign In
 
-Create
+↓
 
-```
-auth.controller.js
-```
+Firebase Authentication
 
-This controller will contain the authentication logic.
+↓
 
-Functions to create
+Backend Verification
 
-- User Signup
-- User Login
-- User Logout
+↓
 
-Required Packages
+JWT Authentication
 
-```javascript
-bcryptjs
+↓
 
-jsonwebtoken
-```
-
-Also import the JWT helper function from
-
-```
-utils/token.js
-```
-
-### Password Flow
-
-```
-User Password
-      │
-      ▼
-Hash Password (bcrypt)
-      │
-      ▼
-Store in MongoDB
-```
-
-### Login Flow
-
-```
-User Login
-      │
-      ▼
-Compare Password
-      │
-      ▼
-Generate JWT
-      │
-      ▼
-Store JWT inside Cookie
+Logged In
 ```
 
 ---
 
-# 🔑 Step 11: JWT Utility
+# 📌 Completed Features
 
-Navigate to
+- [x] User Authentication
+- [x] JWT Authentication
+- [x] Password Hashing
+- [x] Forgot Password
+- [x] Password Reset
+- [x] Google Authentication
+- [x] Firebase Integration
+- [x] Secure Cookies
+- [x] Responsive Authentication UI
+
+---
+
+# 🚧 Upcoming Features
+
+- [ ] User Profile
+- [ ] Restaurant Listing
+- [ ] Restaurant Details
+- [ ] Search Functionality
+- [ ] Food Categories
+- [ ] Cart Management
+- [ ] Checkout
+- [ ] Payment Gateway
+- [ ] Order History
+- [ ] Favorites
+- [ ] User Dashboard
+- [ ] Admin Dashboard
+- [ ] Restaurant Dashboard
+- [ ] Image Uploads
+- [ ] Reviews & Ratings
+- [ ] Notifications
+
+---
+
+# 🛠 Environment Variables
+
+## Backend
 
 ```
-utils/
+PORT
+MONGODB_URI
+JWT_SECRET
+EMAIL
+EMAIL_PASSWORD
+CLIENT_URL
 ```
 
-Create
+## Frontend
 
 ```
-token.js
-```
-
-This file is responsible for
-
-- Generating JWT Tokens
-- Setting Cookies
-- Using JWT Secret from `.env`
-
-Example
-
-```
-process.env.JWT_SECRET
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
 ```
 
 ---
 
-# 🌐 Step 12: Authentication Routes
+# 🤝 Contributing
 
-Navigate to
+Contributions are welcome.
 
-```
-routes/
-```
+1. Fork the repository.
+2. Create a feature branch.
 
-Create
-
-```
-auth.route.js
+```bash
+git checkout -b feature/your-feature
 ```
 
-Create the following routes.
+3. Commit your changes.
 
-| Method | Endpoint | Purpose |
-|----------|----------|----------|
-| POST | /signup | Register User |
-| POST | /login | Login User |
-| POST | /logout | Logout User |
+```bash
+git commit -m "feat: add your feature"
+```
 
-Connect these routes with the controller functions.
+4. Push your branch.
+
+```bash
+git push origin feature/your-feature
+```
+
+5. Open a Pull Request.
 
 ---
 
-# 📂 Final Backend Structure
+# 📜 License
 
-```text
-Backend/
-│
-├── config/
-│   └── db.js
-│
-├── controllers/
-│   └── auth.controller.js
-│
-├── middleware/
-│
-├── models/
-│   └── user.model.js
-│
-├── routes/
-│   └── auth.route.js
-│
-├── utils/
-│   └── token.js
-│
-├── .env
-├── .gitignore
-├── index.js
-├── package.json
-└── package-lock.json
-```
+This project is licensed under the MIT License.
 
 ---
 
-# 📚 Technologies Used
+# 👨‍💻 Author
 
-- Node.js
-- Express.js
-- MongoDB Atlas
-- MongoDB Compass
-- Mongoose
-- JWT Authentication
-- bcryptjs
-- dotenv
-- cookie-parser
-- Nodemon
-- Visual Studio Code
+**Mohit Yadav**
+
+- GitHub: https://github.com/Mohityadav-bit
+- LinkedIn: *(Add your LinkedIn URL)*
 
 ---
 
-# ✅ Phase 1 Checklist
+## ⭐ Support
 
-- [x] Create Backend & Frontend folders
-- [x] Initialize Node.js project
-- [x] Install dependencies
-- [x] Configure package.json
-- [x] Create project folder structure
-- [x] Create `.env`
-- [x] Setup MongoDB Atlas
-- [x] Connect MongoDB
-- [x] Configure Express server
-- [x] Create User Model
-- [x] Create Authentication Controller
-- [x] Create JWT Utility
-- [x] Create Authentication Routes
-
----
-
-# 🎯 Next Phase
-
-In Phase 2, you can continue with:
-
-- JWT Authentication Middleware
-- Protected Routes
-- Authorization
-- User Profile API
-- File Upload (Multer + Cloudinary)
-- Frontend Authentication
-- Complete Authentication Flow
+If you found this project useful, consider giving it a **Star** on GitHub.
