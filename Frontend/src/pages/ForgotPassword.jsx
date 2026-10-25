@@ -2,7 +2,7 @@ import React, { useState } from "react"; // ✅ added useState
 import { useNavigate } from "react-router-dom";
 import { logo, img1 } from "../assets/assets";
 import toast from "react-hot-toast";
-import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+// import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import {serverUrl} from '../App';
 import axios from "axios";
 
@@ -69,7 +69,7 @@ const ForgotPassword = () => {
       toast.success("OTP verified");
 
       setStep(3); // move to reset password
-    } catch (err) {
+    } catch{
       toast.dismiss(loading);
       toast.error("Invalid OTP");
     }
@@ -101,7 +101,7 @@ const ForgotPassword = () => {
       toast.success("Password reset successful");
 
       navigate("/signin");
-    } catch (err) {
+    } catch{
       toast.dismiss(loading);
       toast.error("Something went wrong");
     }

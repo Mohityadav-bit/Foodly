@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { serverUrl } from "../App";
@@ -8,19 +8,21 @@ import toast from 'react-hot-toast';
 import { burger, logo } from '../assets/assets';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from "../firebase.js";
+import { useDispatch } from "react-redux";
 import {
   ArrowRight,
   CheckCircle2,
   Lock,
   Mail,
   Phone,
-  Sparkles,
   UserRound,
   Eye,
   EyeOff,
 } from 'lucide-react'
+import { setUserData } from '../reduxToolkit/userSlice.js';
 
 const Signup = () => {
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false)
 
   const [role, setRole] = useState("")
@@ -44,6 +46,7 @@ const Signup = () => {
     try {
       const { fullName, email, mobile, password } = formData;
       const result = await axios.post(`${serverUrl}/api/auth/signup`, { fullName, email, mobile, role, password }, { withCredentials: true })
+      dispatch(setUserData(result.data))
       // toast.dismiss(loading);
       toast.success("Account created successfully");
       console.log(result)
@@ -91,6 +94,7 @@ const Signup = () => {
 
       toast.dismiss(loading);
       toast.success("Account created successfully!");
+      dispatch(setUserData(data))
 
       navigate("/");
     } catch (error) {

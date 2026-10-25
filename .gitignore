@@ -3,3 +3,34 @@ node_modules/
 Process.txt
 FeatureNotes
 README.md
+
+
+
+# Dependencies
+node_modules/
+
+# Build output
+Frontend/dist/
+
+# Playwright output
+Frontend/test-results/
+Frontend/playwright-report/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+Frontend/dist/
+
+# Playwright artifacts
+Frontend/test-results/
+Frontend/playwright-report/
+Frontend/playwright/.cache/
+
+# Local backups
+*.before-tests.bak

@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 import { logo } from '../assets/assets';
 import {
   Search,
-  MapPin,
   Star,
   Clock,
   ShoppingCart,
-  Sparkles,
 } from 'lucide-react'
 
 const HomePage = () => {
@@ -43,17 +41,17 @@ const HomePage = () => {
       tag: 'Trending',
     },
   ]
-  const colors = {
-    primary: '#FF6B35',
-    primaryHover: '#F05A28',
-    primaryLight: '#FFF2EB',
-    background: '#FFF8F2',
-    surface: '#FFFFFF',
-    border: '#E5E7EB',
-    heading: '#111827',
-    body: '#374151',
-    muted: '#6B7280',
-  }
+  // const colors = {
+  //   primary: '#FF6B35',
+  //   primaryHover: '#F05A28',
+  //   primaryLight: '#FFF2EB',
+  //   background: '#FFF8F2',
+  //   surface: '#FFFFFF',
+  //   border: '#E5E7EB',
+  //   heading: '#111827',
+  //   body: '#374151',
+  //   muted: '#6B7280',
+  // }
   return (
     <div className="bg-[#FFF8F2] min-h-screen">
 

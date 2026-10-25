@@ -11,12 +11,14 @@ import {
   ArrowRight,
   Lock,
   Mail,
-  Sparkles,
   Eye,
   EyeOff,
 } from 'lucide-react'
+import { useDispatch } from "react-redux";
+import { setUserData } from '../reduxToolkit/userSlice.js'
 
 const Signin = () => {
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false)
 
   const [formData, setFormData] = useState({
@@ -38,6 +40,7 @@ const Signin = () => {
       toast.dismiss(loading);
       toast.success(`Welcome back, ${data.fullName || result.user.displayName}!`);
       // console.log(result)
+      dispatch(setUserData(result.data))
       navigate('/')
     } catch (error) {
       toast.dismiss(loading); // ❗ always dismiss
@@ -69,7 +72,7 @@ const Signin = () => {
 
       toast.dismiss(loading);
       toast.success(`Welcome back, ${data.fullName || result.user.displayName}!`);
-
+      dispatch(setUserData(data))
       navigate("/");
     } catch (error) {
       toast.dismiss(loading);
