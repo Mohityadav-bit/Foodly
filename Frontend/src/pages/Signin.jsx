@@ -36,12 +36,11 @@ const Signin = () => {
     const loading = toast.loading("Signing in...");
     try {
       const { email, password } = formData;
-      const {data} = await axios.post(`${serverUrl}/api/auth/signin`, { email, password }, { withCredentials: true })
+      const { data } = await axios.post(`${serverUrl}/api/auth/signin`, { email, password }, { withCredentials: true })
       toast.dismiss(loading);
-      toast.success(`Welcome back, ${data.fullName || result.user.displayName}!`);
-      // console.log(result)
-      dispatch(setUserData(result.data))
-      navigate('/')
+      toast.success(`Welcome back, ${data.fullName || "User"}!`);
+      dispatch(setUserData(data));
+      navigate("/");
     } catch (error) {
       toast.dismiss(loading); // ❗ always dismiss
 
